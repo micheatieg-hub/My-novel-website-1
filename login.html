@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Echoes Beyond the Horizon</title>
+<style>
+body { font-family:'Arial', sans-serif; background:#f9f9f9; display:flex; justify-content:center; align-items:center; height:100vh; }
+.container { background:white; padding:30px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); width:90%; max-width:400px; }
+h1 { text-align:center; color:#6200EE; margin-bottom:20px; }
+input { width:100%; padding:12px; margin:10px 0; border-radius:12px; border:1px solid #ccc; font-size:1rem; }
+button { width:100%; padding:15px; border:none; border-radius:12px; background:#03DAC5; color:white; font-size:1.1rem; cursor:pointer; transition:0.3s; }
+button:hover { background:#018786; }
+#message { text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Login</h1>
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="message"></p>
+<a href="signup.html">Don't have an account? Sign Up</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/appwrite@9.30.0/dist/appwrite.min.js"></script>
+<script>
+const client = new Appwrite.Client();
+client
+  .setEndpoint('https://fra.cloud.appwrite.io/v1')
+  .setProject('69702007003c1eaed6f4');
+
+const account = new Appwrite.Account(client);
+
+async function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    await account.createSession(email, password);
+    document.getElementById('message').style.color = 'green';
+    document.getElementById('message').innerText = 'Login successful! Redirecting...';
+    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+  } catch (err) {
+    document.getElementById('message').style.color = 'red';
+    document.getElementById('message').innerText = err.message;
+  }
+}
+</script>
+
+</body>
+</html>

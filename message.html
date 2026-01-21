@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages - Echoes Beyond the Horizon</title>
+<style>
+body { font-family:'Arial', sans-serif; background:#f9f9f9; padding:30px; line-height:1.6; color:#333; }
+h1 { color:#6200EE; text-align:center; margin-bottom:20px; }
+label { display:block; margin-top:15px; font-weight:bold; }
+input, textarea { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
+button { margin-top:15px; padding:12px 20px; background:#03DAC5; border:none; border-radius:10px; color:white; font-weight:bold; cursor:pointer; }
+button:hover { background:#018786; }
+a { display:block; margin-top:20px; color:#03DAC5; text-decoration:none; font-weight:bold; }
+a:hover { color:#018786; }
+</style>
+</head>
+<body>
+
+<h1>Send a Message</h1>
+
+<form id="messageForm">
+  <label for="subject">Subject</label>
+  <input type="text" id="subject" required>
+
+  <label for="message">Message</label>
+  <textarea id="message" rows="6" required></textarea>
+
+  <button type="submit">Send Message</button>
+</form>
+
+<a href="index.html">← Back to Home</a>
+
+<!-- Appwrite Script -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@9.30.0/dist/appwrite.min.js"></script>
+<script>
+// Initialize Appwrite
+const client = new Appwrite.Client();
+client.setEndpoint('https://fra.cloud.appwrite.io/v1') // Appwrite endpoint
+      .setProject('69702007003c1eaed6f4');
+
+const account = new Appwrite.Account(client);
+const database = new Appwrite.Databases(client);
+
+const collectionId = '6970258d0018b14990e2'; // Your messages collection
+
+// Check if user is logged in
+async function checkUser() {
+  try {
+    const user = await account.get();
+    console.log('Logged in as:', user.email);
+  } catch (err) {
+    alert('You must be logged in to send a message.');
+    window.location.href = 'login.html';
+  }
+}
+
+// Send message
+document.getElementById('messageForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const subject = document.getElementById('subject').value;
+  const message = document.getElementById('message').value;
+
+  try {
+    const user = await account.get();
+    await database.createDocument(
+      '6970258d0018b14990e2', // Collection ID
+      Appwrite.ID.unique(),
+      {
+        userId: user.$id,
+        subject: subject,
+        message: message,
+        reply: '',
+        read: false,
+        replyTo: ''
+      }
+    );
+    alert('Message sent successfully!');
+    document.getElementById('messageForm').reset();
+  } catch (err) {
+    console.error(err);
+    alert('Error sending message. Try again.');
+  }
+});
+
+// Run on page load
+checkUser();
+</script>
+
+</body>
+</html>

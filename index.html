@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echoes Beyond the Horizon</title>
+<meta name="theme-color" content="#6200EE">
+<style>
+body { font-family:'Arial', sans-serif; background:#f9f9f9; margin:0; padding:0; display:flex; flex-direction:column; min-height:100vh; }
+header { background:#6200EE; color:white; padding:20px; text-align:center; font-size:1.5rem; font-weight:bold; }
+main { flex:1; padding:20px; display:flex; flex-direction:column; align-items:center; }
+img { max-width:90%; border-radius:12px; margin-bottom:20px; }
+.card { background:white; padding:15px; margin:10px 0; border-radius:12px; width:90%; max-width:400px; box-shadow:0 3px 6px rgba(0,0,0,0.1); text-align:center; }
+.card a { display:inline-block; margin:5px 10px; padding:10px 20px; background:#03DAC5; color:white; text-decoration:none; border-radius:12px; transition:0.3s; }
+.card a:hover { background:#018786; }
+footer { background:#6200EE; color:white; text-align:center; padding:10px; margin-top:20px; }
+.hidden { display:none; }
+</style>
+</head>
+<body>
+
+<header>Echoes Beyond the Horizon</header>
+
+<main>
+<!-- Hero Image -->
+<img src="images/tree.jpg" alt="Novel Cover">
+
+<!-- Login / Signup Card -->
+<div class="card" id="authCard">
+<h2>Welcome to the Novel App</h2>
+<p>By TIEG — Dive into adventure, mystery, and courage.</p>
+<a href="login.html">Login</a>
+<a href="signup.html">Sign Up</a>
+</div>
+
+<!-- Chapters List -->
+<div class="card">
+<h3>Chapter 1</h3>
+<p>The journey begins in a small, quiet village...</p>
+<a href="chapter1.html">Read Chapter</a>
+</div>
+
+<div class="card">
+<h3>Chapter 2</h3>
+<p>Unexpected events bring new challenges...</p>
+<a href="chapter2.html">Read Chapter</a>
+</div>
+
+<div class="card">
+<h3>Chapter 3</h3>
+<p>Secrets revealed beyond imagination...</p>
+<a href="chapter3.html">Read Chapter</a>
+</div>
+
+<div class="card">
+<h3>Chapter 4</h3>
+<p>The path grows darker as trials continue...</p>
+<a href="chapter4.html">Read Chapter</a>
+</div>
+
+<div class="card">
+<h3>Chapter 5</h3>
+<p>The epic conclusion awaits...</p>
+<a href="chapter5.html">Read Chapter</a>
+</div>
+
+<!-- Messages Card (Only for logged-in users) -->
+<div class="card hidden" id="messageCard">
+<h3>Messages</h3>
+<p>Send a message to the author/admin.</p>
+<a href="message.html">Go to Messages</a>
+</div>
+
+</main>
+
+<footer>
+<a href="privacy.html" style="color:white; text-decoration:none; margin-right:15px;">Privacy Policy</a>
+<a href="about.html" style="color:white; text-decoration:none;">About</a>
+</footer>
+
+<!-- Appwrite Auth Script -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@9.30.0/dist/appwrite.min.js"></script>
+<script>
+// Initialize Appwrite client
+const client = new Appwrite.Client();
+client
+  .setEndpoint('https://fra.cloud.appwrite.io/v1') // Appwrite endpoint
+  .setProject('69702007003c1eaed6f4'); // Project ID
+
+const account = new Appwrite.Account(client);
+
+// Check if user is logged in
+async function checkUser() {
+  try {
+    const user = await account.get();
+    console.log('Logged in as:', user.email);
+    // Hide login/signup card
+    document.getElementById('authCard').classList.add('hidden');
+    // Show message card
+    document.getElementById('messageCard').classList.remove('hidden');
+  } catch (err) {
+    console.log('No user logged in');
+    // Login/signup card visible
+  }
+}
+
+// Run on page load
+checkUser();
+</script>
+
+</body>
+</html>
